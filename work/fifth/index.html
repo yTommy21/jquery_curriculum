@@ -101,11 +101,12 @@
         var selectValue = $('.select').val();
         $('.list li').each(function(index, el) {
           var data = $(this).data('category-type');
-          // all check
-          if(selectValue == 'all') {
+          // allが選択された時、すべてを表示してbreakする
+          if(selectValue === 'all') {
             $(this).show();
             return true;
           }
+          // 選択した値に応じて表示を切り替える
           if(selectValue === data) {
             $(this).show();
           }else {

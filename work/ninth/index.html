@@ -42,6 +42,40 @@
       // </li>
       //
       // このテンプレートに取得してきた中身を入れて表示します。
+
+      var addObj = $();
+
+      $.ajax({
+        url: './data.json',
+      })
+        .done(function(data) {
+          // liをappendするように新規作成
+          var colorList = $('<ul></ul>');
+          colorList.addClass('colorList');
+
+          // jsonをjavascriptで扱えるように変換
+          var json = JSON.stringify(data);
+          json = JSON.parse(json);
+
+          $.each(json.colorsArray, function(i, el) {
+            var colorName = el.colorName;
+            var hexValue = el.hexValue;
+
+            var colorListItem = $('<li></li>');
+            colorListItem.addClass('colorList__item');
+
+            var colorListTitle = $('<p></p>');
+            colorListTitle.addClass('colorList__title');
+            colorListTitle.css('background-color', hexValue);
+            colorListTitle.text(colorName);
+            colorListItem.append(colorListTitle);
+
+            colorList.append(colorListItem);
+          });
+
+          // wrapperにまとめて追加
+          $('.wrapper').html(colorList);
+      });
     </script>
   </body>
 </html>

@@ -29,11 +29,11 @@
       $('.input').keyup(function() {
         var text = $('.input').val().replace(/¥s+/g, '');
 
-        // rest-countに代入
+        // rest-countの表示を更新する
         var result = 30 - text.length;
         $('.rest-count').text(result);
 
-        // 入力された文字数判定
+        // 入力された文字数を判定して赤に切り替える
         if(text.length > 30) {
           $('.rest-count').addClass('red');
         }else {

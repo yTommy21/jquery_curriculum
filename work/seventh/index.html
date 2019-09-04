@@ -35,6 +35,8 @@
       // .width() 要素の幅を取得します。
       // .length 要素の個数を取得します。
       var currentPos = 0;
+      var imgList = $('.slider-list li');
+      console.log(imgList[0]);
 
       $('.slider-ctrl-btn').click(function() {
         var data = $(this).data('ctrl');
@@ -44,9 +46,9 @@
           var imgWidth = $(this).children().width();
           console.log(imgWidth);
         });
-        console.log(imgArray);
         if(data == 'prev') {
           currentPos -= 1;
+          // カレントが0より小さくなったら3にする
           if(currentPos < 0) {
             currentPos = 3;
           }
@@ -55,6 +57,7 @@
 
         }else if(data == 'next') {
           currentPos += 1;
+          // カレントが3より大きくなったら0にする
           if(currentPos > 3) {
             currentPos = 0;
           }

@@ -42,6 +42,61 @@
       // .offset().top 要素の位置を取得します。
       // .fadeIn() 要素をフェードインさせる。
       // .fadeOut() 要素をフェードアウトさせる。
+
+      // それぞれのoffset値の取得
+      var homeOffset = $('p.title').eq(0).offset().top;
+      var newsOffset = $('p.title').eq(1).offset().top;
+      var aboutOffset = $('p.title').eq(2).offset().top;
+
+      // メニュークリック時処理
+      $('.menu__btn').click(function() {
+        var clickedData = $(this).data('scroll-place-type');
+
+        // スクロールタイプがホームの時
+        if(clickedData === "home") {
+          $('html,body').animate({ scrollTop: homeOffset });
+        }
+
+        // スクロールタイプがニュースの時
+        if(clickedData === "news") {
+          $('html,body').animate({ scrollTop: newsOffset });
+        }
+
+        // スクロールタイプがアバウトの時
+        if(clickedData === "about") {
+          $('html,body').animate({ scrollTop: aboutOffset });
+        }
+
+      });
+
+      // 画面読み込み時のスクロール位置でボタン表示判定
+      window.onload = function() {
+        // 画面のスクロール一取得
+        var windowPos = $(window).scrollTop();
+
+        // ボタン表示判定
+        if(windowPos >= 100) {
+          $('.scrollTopBtn').fadeIn(1000);
+        }
+      };
+
+      // トップ表示ボタン判定
+      $(window).scroll(function() {
+        // 画面のスクロール一取得
+        var windowPos = $('html,body').scrollTop();
+
+        // ボタン表示判定
+        if(windowPos >= 100) {
+          $('.scrollTopBtn').fadeIn(1000);
+        }else if(windowPos < 100) {
+          $('.scrollTopBtn').fadeOut(1000);
+        }
+      });
+
+      // トップボタン処理
+      $('.scrollTopBtn').click(function() {
+        $('html,body').animate({ scrollTop: 0 });
+      });
     </script>
   </body>
 </html>
