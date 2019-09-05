@@ -68,44 +68,45 @@
       //
       //
       //
+      $(function() {
+        // 前回検索した単語
+        var beforeSearchString = "";
 
-      // 前回検索した単語
-      var beforeSearchString = "";
+        // 繰り返し検索回数
+        var repeatCount = 0;
 
-      // 繰り返し検索回数
-      var repeatCount = 0;
+        // 検索ボタンが押された時の処理
+        $('#js-search-button').click(function() {
+          // 検索文字列の取得
+          var searchString = $('#js-search-word').val();
 
-      // 検索ボタンが押された時の処理
-      $('#js-search-button').click(function() {
-        // 検索文字列の取得
-        var searchString = $('#js-search-word').val();
+          // 前回検索した単語かどうか
+          if(searchString === beforeSearchString) {
+            // 繰り返し検索回数を1回増やす
+            repeatCount += 1;
 
-        // 前回検索した単語かどうか
-        if(searchString === beforeSearchString) {
-          // 繰り返し検索回数を1回増やす
-          repeatCount += 1;
-
-          // ajax通信
-          booksDisplay(searchString);
+            // ajax通信
+            booksDisplay(searchString);
 
 
-        }else if(searchString !== beforeSearchString) {
-          // 繰り返し検索回数を1にする
-          repeatCount = 1;
-          // 前回検索された単語として追加
-          beforeSearchString = searchString;
+          }else if(searchString !== beforeSearchString) {
+            // 繰り返し検索回数を1にする
+            repeatCount = 1;
+            // 前回検索された単語として追加
+            beforeSearchString = searchString;
 
-          // ulタグの中身を全消去する
-          $('.lists').empty();
+            // ulタグの中身を全消去する
+            $('.lists').empty();
 
-          // ajax通信
-          booksDisplay(searchString);
-        }
+            // ajax通信
+            booksDisplay(searchString);
+          }
+        });
       });
 
-
       // 書籍リストを画面に表示する
-      function booksDisplay(searchString) {
+      // 引数として検索する単語と何回目の検索かのカウントを指定する
+      function booksDisplay(searchString, repeatCount) {
         $.ajax({
           url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
           type: 'GET',

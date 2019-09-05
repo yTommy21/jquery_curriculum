@@ -26,19 +26,21 @@
       // .keyup() 文字入力後に発火されるイベントです。
       // .replace(/\s+/g,'').length 改行を含まない文字数を取得します。
       // .val() input要素のvalueを取得します。
-      $('.input').keyup(function() {
-        var text = $('.input').val().replace(/¥s+/g, '');
+      $(function() {
+        $('.input').keyup(function() {
+          var text = $('.input').val().replace(/¥s+/g, '');
 
-        // rest-countの表示を更新する
-        var result = 30 - text.length;
-        $('.rest-count').text(result);
+          // rest-countの表示を更新する
+          var result = 30 - text.length;
+          $('.rest-count').text(result);
 
-        // 入力された文字数を判定して赤に切り替える
-        if(text.length > 30) {
-          $('.rest-count').addClass('red');
-        }else {
-          $('.rest-count').removeClass('red');
-        }
+          // 入力された文字数を判定して赤に切り替える
+          if(text.length > 30) {
+            $('.rest-count').addClass('red');
+          }else {
+            $('.rest-count').removeClass('red');
+          }
+        });
       });
     </script>
   </body>

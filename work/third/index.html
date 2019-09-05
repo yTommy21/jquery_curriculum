@@ -30,31 +30,27 @@
       // .eq() 引数に応じたindexの要素を指定します。
       // .addClass() クラスを追加します。
       // .removeClass() クラスを削除します。
-      $('.nav li').click(function() {
-        // クリックしたリストのindexを取得する
-        var num = $(this).index();
-        var contentsLi = $('.contents li');
+      $(function() {
+        $('.nav li').click(function() {
+          // クリックしたリストのindexを取得する
+          var num = $(this).index();
+          var navLength = $('.nav li').length;
+          var contentsLi = $('.contents li');
+          var contentsLength = contentsLi.length;
+          if(navLength == contentsLength) {
+            alert("クリックしたメニューのテキストは存在しません。");
+            return false;
+          }
 
-        // indexの数字に応じてis-hiddenを切り替える
-        switch(num) {
-          default:
-            return false;
-          case 0:
-            contentsLi.eq(0).removeClass('is-hidden');
-            contentsLi.eq(1).addClass('is-hidden');
-            contentsLi.eq(2).addClass('is-hidden');
-            return false;
-          case 1:
-            contentsLi.eq(0).addClass('is-hidden');
-            contentsLi.eq(1).removeClass('is-hidden');
-            contentsLi.eq(2).addClass('is-hidden');
-            return false;
-          case 2:
-            contentsLi.eq(0).addClass('is-hidden');
-            contentsLi.eq(1).addClass('is-hidden');
-            contentsLi.eq(2).removeClass('is-hidden');
-            return false;
-        };
+          // リストのlength分繰り返し実行
+          for(var i = 0; i < contentsLength; i++) {
+            if(i == num) {
+              contentsLi.eq(i).removeClass('is-hidden');
+            }else {
+              contentsLi.eq(i).addClass('is-hidden');
+            }
+          }
+        });
       });
     </script>
   </body>

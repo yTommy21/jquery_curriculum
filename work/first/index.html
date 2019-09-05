@@ -69,69 +69,70 @@
 </div>
 <script src="../../common/js/jquery.js"></script>
 <script>
-  // 第1問  id='q1'の要素の文字色を赤色にせよ。
-  $('#q1').css('color', '#f00');
+  $(function() {
+    // 第1問  id='q1'の要素の文字色を赤色にせよ。
+    $('#q1').css('color', '#f00');
 
-  // 第2問  id='q2'の要素をクリックしたら背景色をピンクにせよ。
-  $('#q2').on('click', function() {
-    $(this).css('background-color', '#ffc0cb');
+    // 第2問  id='q2'の要素をクリックしたら背景色をピンクにせよ。
+    $('#q2').on('click', function() {
+      $(this).css('background-color', '#ffc0cb');
+    });
+
+    // 第3問  id='q3'の要素をクリックしたら2秒かけてフェードアウトさせよ。
+    $('#q3').on('click', function() {
+      $(this).fadeOut(2000);
+    });
+
+    // 第4問  id='q4'の要素をクリックしたらこの要素の前後とこの要素内の前後にテキストを挿入せよ。
+    $('#q4').on('click', function() {
+      $(this).before('ボタンの前')
+        .after('ボタンの後ろ')
+        .prepend('ボタンの中の前')
+        .append('ボタンの中の後ろ');
+    });
+
+    // 第5問  id='q5'の要素をクリックしたらこの要素にlargeというクラスを付与せよ。
+    $('#q5').on('click', function() {
+      $(this).addClass('large');
+    });
+
+    // 第6問  id='q6'の要素をクリックしたらこの要素を2秒かけてmargin-topとmargin-leftを100pxの位置に移動させよ。
+    $('#q6').on('click', function() {
+      $(this).animate({
+        'margin-left': '100px',
+        'margin-top': '100px'
+      }, 2000);
+    });
+
+    // 第7問  id='q7'の子要素をクリックしたら、その要素のインデックス（何番目か）をconsole.log()とalert()を用いて表示させよ。
+    $('#q7 li').on('click', function() {
+      var num = $(this).index();
+      console.log((num + 1) + '番目の要素です。');
+      alert((num + 1) + '番目の要素です。');
+    });
+
+    // 第8問  id='q8'の要素をhoverしたらlargeというクラスを付与し、hoverが外れたら、クラスを削除せよ。
+    $('#q8').hover(function() { // hover in
+      $(this).addClass('large');
+    }, function() { //hover out
+      $(this).removeClass('large');
+    });
+
+    // 第9問  id='q9'の要素をクリックしたらこの要素に設定してあるdata属性をconsoleに表示せよ。
+    $('#q9').on('click', function() {
+      var data = $(this).data('text');
+      console.log(data);
+    });
+
+    // 第10問 id='q10'の子要素をクリックしたら、その要素のインデックスと等しいid='q11'の子要素にlargeというクラスを追加せよ。
+    $('#q10 li').on('click', function() {
+      var num = $(this).index();
+      var q11 = $('#q11 li');
+
+      q11.eq(num).addClass('large');
+
+    });
   });
-
-  // 第3問  id='q3'の要素をクリックしたら2秒かけてフェードアウトさせよ。
-  $('#q3').on('click', function() {
-    $(this).fadeOut(2000);
-  });
-
-  // 第4問  id='q4'の要素をクリックしたらこの要素の前後とこの要素内の前後にテキストを挿入せよ。
-  $('#q4').on('click', function() {
-    $(this).before('ボタンの前')
-           .after('ボタンの後ろ')
-           .prepend('ボタンの中の前')
-           .append('ボタンの中の後ろ');
-  });
-
-  // 第5問  id='q5'の要素をクリックしたらこの要素にlargeというクラスを付与せよ。
-  $('#q5').on('click', function() {
-    $(this).addClass('large');
-  });
-
-  // 第6問  id='q6'の要素をクリックしたらこの要素を2秒かけてmargin-topとmargin-leftを100pxの位置に移動させよ。
-  $('#q6').on('click', function() {
-    $(this).animate({
-      'margin-left': '100px',
-      'margin-top': '100px'
-    }, 2000);
-  });
-
-  // 第7問  id='q7'の子要素をクリックしたら、その要素のインデックス（何番目か）をconsole.log()とalert()を用いて表示させよ。
-  $('#q7 li').on('click', function() {
-    var num = $(this).index();
-    console.log((num + 1) + '番目の要素です。');
-    alert((num + 1) + '番目の要素です。');
-  });
-
-  // 第8問  id='q8'の要素をhoverしたらlargeというクラスを付与し、hoverが外れたら、クラスを削除せよ。
-  $('#q8').hover(function() { // hover in
-    $(this).addClass('large');
-  }, function() { //hover out
-    $(this).removeClass('large');
-  });
-
-  // 第9問  id='q9'の要素をクリックしたらこの要素に設定してあるdata属性をconsoleに表示せよ。
-  $('#q9').on('click', function() {
-    var data = $(this).data('text');
-    console.log(data);
-  });
-
-  // 第10問 id='q10'の子要素をクリックしたら、その要素のインデックスと等しいid='q11'の子要素にlargeというクラスを追加せよ。
-  $('#q10 li').on('click', function() {
-    var num = $(this).index();
-    var q11 = $('#q11 li');
-
-    q11.eq(num).addClass('large');
-
-  });
-
 </script>
 </body>
 </html>
