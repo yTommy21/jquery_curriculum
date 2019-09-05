@@ -68,6 +68,136 @@
       //
       //
       //
+
+      // 前回検索した単語
+      var beforeSearchString = "";
+
+      // 繰り返し検索回数
+      var repeatCount = 0;
+
+      // 検索ボタンが押された時の処理
+      $('#js-search-button').click(function() {
+        // 検索文字列の取得
+        var searchString = $('#js-search-word').val();
+
+        // 前回検索した単語かどうか
+        if(searchString === beforeSearchString) {
+          // 繰り返し検索回数を1回増やす
+          repeatCount += 1;
+
+          // ajax通信
+          booksDisplay(searchString);
+
+
+        }else if(searchString !== beforeSearchString) {
+          // 繰り返し検索回数を1にする
+          repeatCount = 1;
+          // 前回検索された単語として追加
+          beforeSearchString = searchString;
+
+          // ulタグの中身を全消去する
+          $('.lists').empty();
+
+          // ajax通信
+          booksDisplay(searchString);
+        }
+      });
+
+
+      // 書籍リストを画面に表示する
+      function booksDisplay(searchString) {
+        $.ajax({
+          url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+          type: 'GET',
+          datatype: 'json',
+          data: {
+            // 「区分:サービス固有パラメーター」を確認して、必要な情報をdata内に入れましょう。
+            applicationId: '1019399324990976605', // (今回はこのIDを使用してください)
+            booksGenreId: '001',
+            hits: '20',
+            page: repeatCount,
+            keyword: searchString
+          },
+        }).done(function(data) {
+          // この中にデータ取得後の動きを記述していきます。
+          console.log(data);
+          var dataLength = data.Items.length;
+          var json = JSON.stringify(data);
+          json = JSON.parse(json);
+          console.log(json);
+
+          console.log(dataLength);
+          // jsonのlengthが0かどうかの分岐
+          if(dataLength == 0) {
+            // <div class="message">検索結果が見つかりませんでした<br>別のキーワードで検索して下さい。</div>
+            var div = $('<div></div>').addClass('message').html('検索結果が見つかりませんでした<br>別のキーワードで検索して下さい。');
+
+            // ulの一つ上にメッセージdivを追加
+            $('.lists').before(div);
+
+          }else if(dataLength > 0){
+            // 取得したjsonのItem数を格納
+            var jsonLength = json.Items.length;
+            console.log(jsonLength);
+
+            var booksList = $();
+
+            // ２０冊未満しかデータがなかった場合のために、jsonLengthを指定
+            for(var i = 0; i < jsonLength; i++) {
+              var item = json.Items[i].Item;
+              var pushItem = createBookDOM(item);
+
+              booksList.push(pushItem[0]);
+            }
+            // console.log(booksList[0]);
+
+            // 検索結果が見つからなかったメッセージの削除
+            $('.message').remove();
+
+            // liのリストをulの要素のすぐ下に追加
+            $('.lists').prepend(booksList);
+          }
+        }).fail(function() {
+          alert('ERROR!!通信に失敗しました。');
+        });
+      }
+
+
+      // オブジェクトを受け取って指定のDOMに整形する
+      // 引数Itemには、本１冊分のオブジェクトを指定する
+      function createBookDOM(item) {
+        var itemAuthor = item.author;               // 作者名
+        var itemPublisherName = item.publisherName; // 出版社名
+        var itemTitle = item.title;                 // 作品名
+        var itemUrl = item.itemUrl;                 // 商品ページURL
+        var itemImageUrl = item.largeImageUrl;      // 画像のURL
+
+        // 大枠のliタグ
+        var li = $('<li></li>').addClass('lists__item');
+
+        // liの子要素のdivタグ
+        var div = $('<div></div>').addClass('lists__item__inner');
+
+        // divタグの子要素のaタグ
+        var a = $('<a>').addClass('lists__item__link').attr('href', itemUrl).attr('target', '_blank');
+
+        var img = $('<img>').attr('src', itemImageUrl).addClass('lists__item__img').attr('alt', itemTitle);
+
+        // aタグの子要素のpタグ3つ
+        var pTitleText = '作品名：　' + itemTitle;
+        var pTitle = $('<p></p>').addClass('lists__item__detail').text(pTitleText);
+
+        var pWriterText = '作者　：　' + itemAuthor;
+        var pWriter = $('<p></p>').addClass('lists__item__detail').text(pWriterText);
+
+        var pPublisherText = '出版社：　' + itemPublisherName;
+        var pPublisher = $('<p></p>').addClass('lists__item__detail').text(pPublisherText);
+
+        // それぞれの親にappendしてreturn
+        return li.append(div.append(a.append(img).append(pTitle).append(pWriter).append(pPublisher)));
+      }
+
+
     </script>
   </body>
 </html>

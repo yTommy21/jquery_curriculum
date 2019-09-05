@@ -50,8 +50,8 @@
       })
         .done(function(data) {
           // liをappendするように新規作成
-          var colorList = $('<ul></ul>');
-          colorList.addClass('colorList');
+          // var colorList = $('<ul></ul>');
+          // colorList.addClass('colorList');
 
           // jsonをjavascriptで扱えるように変換
           var json = JSON.stringify(data);
@@ -70,11 +70,12 @@
             colorListTitle.text(colorName);
             colorListItem.append(colorListTitle);
 
-            colorList.append(colorListItem);
+            addObj.push(colorListItem[0]);
           });
 
           // wrapperにまとめて追加
-          $('.wrapper').html(colorList);
+          // $('.wrapper').html(addObj);
+          $('.colorList').html(addObj);
       });
     </script>
   </body>

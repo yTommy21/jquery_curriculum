@@ -34,9 +34,16 @@
       // .data() 要素のdata属性を取得します。
       // .width() 要素の幅を取得します。
       // .length 要素の個数を取得します。
-      var currentPos = 0;
+      var currentArrayNum = 0;
       var imgList = $('.slider-list li');
-      console.log(imgList[0]);
+      var imageWidthList = [];
+
+      // 各画像のwidthを配列に格納
+      for(var i = 0; i < imgList.length - 1; i++) {
+        console.log(imgList.eq(i));
+        console.log(imgList.eq(i).width());
+        imageWidthList[i] = imgList.eq(i).width();
+      }
 
       $('.slider-ctrl-btn').click(function() {
         var data = $(this).data('ctrl');
@@ -46,25 +53,50 @@
           var imgWidth = $(this).children().width();
           console.log(imgWidth);
         });
-        if(data == 'prev') {
-          currentPos -= 1;
+        if(data === 'prev') {
+          currentArrayNum -= 1;
           // カレントが0より小さくなったら3にする
-          if(currentPos < 0) {
-            currentPos = 3;
+          if(currentArrayNum < 0) {
+            currentArrayNum = 3;
           }
-          var px = imgArray[currentPos] + 'px';
-          $('.slider-list').animate({ 'left': px }, 1000);
 
-        }else if(data == 'next') {
-          currentPos += 1;
-          // カレントが3より大きくなったら0にする
-          if(currentPos > 3) {
-            currentPos = 0;
+          // １枚目の画像表示ならleft: 0に移動
+          if(currentArrayNum == 0) {
+            $('.slider-list').animate({ 'left': 0 }, 1000);
+            return true;
+          }else {
+            var willMoveWidth = 0;
+            for(var i = 0; i <= currentArrayNum - 1; i++) {
+              willMoveWidth += imageWidthList[i];
+            }
+
+            // 計算した移動するwidth分をマイナスで指定する
+            var px = '-' + willMoveWidth + 'px';
+            $('.slider-list').animate({ 'left': px }, 1000);
           }
-          var px = imgArray[currentPos] + 'px';
-          $('.slider-list').animate({ 'left': px }, 1000);
+
+        }else if(data === 'next') {
+          currentArrayNum += 1;
+          // カレントが3より大きくなったら0にする
+          if(currentArrayNum > 3) {
+            currentArrayNum = 0;
+          }
+
+          // １枚目の画像表示ならleft: 0に移動
+          if(currentArrayNum == 0) {
+            $('.slider-list').animate({ 'left': 0 }, 1000);
+          }else {
+            var willMoveWidth = 0;
+            for(var i = 0; i <= currentArrayNum - 1; i++) {
+              willMoveWidth += imageWidthList[i];
+            }
+
+            // 計算した移動するwidth分をマイナスで指定する
+            var px = '-' + willMoveWidth + 'px';
+            $('.slider-list').animate({ 'left': px }, 1000);
+          }
         }
-        console.log(currentPos);
+        console.log(currentArrayNum);
       });
     </script>
   </body>
