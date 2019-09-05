@@ -99,21 +99,22 @@
       // $().each() DOM要素を1つずつループ処理をする（ループ内で$(this)を使うと要素がひとつずつ取得できる）
       $(function() {
         $('.select').change(function() {
-          var selectValue = $('.select').val();
-          $('.list li').each(function() {
-            var data = $(this).data('category-type');
-            // allが選択された時、すべてを表示してbreakする
-            if(selectValue === 'all') {
-              $(this).show();
-              return true;
-            }
-            // 選択した値に応じて表示を切り替える
-            if(selectValue === data) {
-              $(this).show();
-            }else {
-              $(this).hide();
-            }
-          });
+          var selectValue = $(this).val();
+
+          $('.list li').hide();
+
+          if(selectValue === 'all') {
+            $('.list li').show();
+          }else {
+            $('.list li').each(function() {
+              var data = $(this).data('category-type');
+              // 選択した値に応じて表示を切り替える
+              if(selectValue === data) {
+                $(this).show();
+              }
+            });
+          }
+
         });
       });
     </script>

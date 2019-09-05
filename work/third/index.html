@@ -34,22 +34,11 @@
         $('.nav li').click(function() {
           // クリックしたリストのindexを取得する
           var num = $(this).index();
-          var navLength = $('.nav li').length;
-          var contentsLi = $('.contents li');
-          var contentsLength = contentsLi.length;
-          if(navLength == contentsLength) {
-            alert("クリックしたメニューのテキストは存在しません。");
-            return false;
-          }
 
-          // リストのlength分繰り返し実行
-          for(var i = 0; i < contentsLength; i++) {
-            if(i == num) {
-              contentsLi.eq(i).removeClass('is-hidden');
-            }else {
-              contentsLi.eq(i).addClass('is-hidden');
-            }
-          }
+          // 一旦全部を消す
+          $('.contents li').addClass('is-hidden');
+
+          $('.contents li').eq(num).removeClass('is-hidden');
         });
       });
     </script>

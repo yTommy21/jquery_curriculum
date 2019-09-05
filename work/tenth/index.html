@@ -104,8 +104,12 @@
         });
       });
 
-      // 書籍リストを画面に表示する
-      // 引数として検索する単語と何回目の検索かのカウントを指定する
+      /**
+       * 画面に書籍リストを表示する
+       *
+       * @param searchString 検索する単語
+       * @param repeatCount 同じ単語の検索を実行した回数
+       */
       function booksDisplay(searchString, repeatCount) {
         $.ajax({
           url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
@@ -164,8 +168,12 @@
       }
 
 
-      // オブジェクトを受け取って指定のDOMに整形する
-      // 引数Itemには、本１冊分のオブジェクトを指定する
+      /**
+       * オブジェクトを受け取って指定のDOMに整形する
+       *
+       * @param item 本１冊分のオブジェクト
+       * @returns {void | *}
+       */
       function createBookDOM(item) {
         var itemAuthor = item.author;               // 作者名
         var itemPublisherName = item.publisherName; // 出版社名
@@ -197,8 +205,6 @@
         // それぞれの親にappendしてreturn
         return li.append(div.append(a.append(img).append(pTitle).append(pWriter).append(pPublisher)));
       }
-
-
     </script>
   </body>
 </html>
