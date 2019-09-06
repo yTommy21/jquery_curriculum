@@ -99,7 +99,7 @@
 
           }
           // ajax通信
-          booksDisplay(searchString, repeatCount);
+          runAjax(searchString, repeatCount);
         });
       });
 
@@ -109,7 +109,7 @@
        * @param searchString 検索する単語
        * @param repeatCount 同じ単語の検索を実行した回数
        */
-      function booksDisplay(searchString, repeatCount) {
+      function runAjax(searchString, repeatCount) {
         $.ajax({
           url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
           type: 'GET',
@@ -125,48 +125,9 @@
         }).done(function(data) {
           // この中にデータ取得後の動きを記述していきます。
           console.log(data);
-          var dataLength = data.Items.length;
-
-          console.log(dataLength);
-          // jsonのlengthが0かどうかの分岐
-          if(dataLength == 0) {
-            // 検索結果がなかった場合のメッセージdivタグ
-            var div = '<div class="message">検索結果が見つかりませんでした<br>別のキーワードで検索して下さい。</div>';
-
-            // ulの一つ上にメッセージdivを追加
-            $('.lists').before(div);
-
-          }else if(dataLength > 0){
-            // 画面に表示する書籍リストのDOMを格納するjqueryオブジェクト
-            var booksList = "";
-
-            // ２０冊未満しかデータがなかった場合のために、jsonLengthを指定
-            for(var i = 0; i < dataLength; i++) {
-              var item = data.Items[i].Item;
-              var addItem = createBookDOMText(item);
-
-              // 書籍リストのjqueryオブジェクトに作成した１冊分を追加する
-              booksList += addItem;
-            }
-            // console.log(booksList[0]);
-
-            // liのリストをulの要素のすぐ下に追加
-            $('.lists').prepend(booksList);
-          }
+          booksDisplay(data);
         }).fail(function(err) {
-          var error = err.responseJSON.error;
-          var errorDesc = err.responseJSON.error_description;
-          var errorStatus = err.status;
-          console.log(err);
-          console.log(error);
-          console.log(errorDesc);
-          console.log(errorStatus);
-          if(!error || !errorDesc || !errorStatus) {
-            alert('APIとの通信に失敗しました。');
-          }else {
-            alert('[' + errorStatus + ': ' + error + '] ' + errorDesc);
-          }
-
+          showAjaxErrorMessage(err);
         });
       }
 
@@ -194,7 +155,7 @@
         li += '<a class="lists__item__link" href="' + itemUrl + '" target="_blank">';
 
         // aタグの子要素
-        li += '<img src="' + itemImageUrl + '" clss="lists__item__img" alt="' + itemTitle + '">';
+        li += '<img src="' + itemImageUrl + '" class="lists__item__img" alt="' + itemTitle + '">';
 
         li += '<p class="lists__item__detail">作品名：　' + itemTitle + '</p>';
 
@@ -245,6 +206,69 @@
 
         // それぞれの親にappendしてreturn
         return li.append(div.append(a.append(img).append(pTitle).append(pWriter).append(pPublisher)));
+      }
+
+
+      /**
+       * Ajaxのdoneで取得したjsonを元に書籍リストを画面に表示する。
+       *
+       * @param data Ajaxのdone引数
+       */
+      function booksDisplay(data) {
+        var dataLength = data.Items.length;
+
+        console.log(dataLength);
+        // jsonのlengthが0かどうかの分岐
+        if(dataLength == 0) {
+          // 検索結果がなかった場合のメッセージdivタグ
+          var div = '<div class="message">検索結果が見つかりませんでした<br>別のキーワードで検索して下さい。</div>';
+
+          // ulの一つ上にメッセージdivを追加
+          $('.lists').before(div);
+
+        }else if(dataLength > 0){
+          // 画面に表示する書籍リストのDOMを格納するjqueryオブジェクト
+          var booksList = "";
+
+          // ２０冊未満しかデータがなかった場合のために、jsonLengthを指定
+          for(var i = 0; i < dataLength; i++) {
+            var item = data.Items[i].Item;
+            var addItem = createBookDOMText(item);
+
+            // 書籍リストのjqueryオブジェクトに作成した１冊分を追加する
+            booksList += addItem;
+          }
+          // console.log(booksList[0]);
+
+          // liのリストをulの要素のすぐ下に追加
+          $('.lists').prepend(booksList);
+        }
+      }
+
+      /**
+       * Ajaxのfailで取得したjsonを元にエラーメッセージを画面に表示する。
+       *
+       * @param err Ajaxのfail引数
+       */
+      function showAjaxErrorMessage(err) {
+        var error = err.responseJSON.error;
+        var errorDesc = err.responseJSON.error_description;
+        var errorStatus = err.status;
+        console.log(err);
+        console.log(error);
+        console.log(errorDesc);
+        console.log(errorStatus);
+        // if(!error || !errorDesc || !errorStatus) {
+        //   alert('APIとの通信に失敗しました。');
+        // }else {
+        //   alert('[' + errorStatus + ': ' + error + '] ' + errorDesc);
+        // }
+
+        // エラーメッセージを作成
+        var div = '<div class="message"> [' + errorStatus + ': ' + error + '] ' + errorDesc + '</div>';
+
+        // ulの一つ上にメッセージdivを追加
+        $('.lists').before(div);
       }
     </script>
   </body>
