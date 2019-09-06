@@ -88,10 +88,6 @@
             // 繰り返し検索回数を1回増やす
             repeatCount += 1;
 
-            // ajax通信
-            booksDisplay(searchString, repeatCount);
-
-
           }else if(searchString !== beforeSearchString) {
             // 繰り返し検索回数を1にする
             repeatCount = 1;
@@ -101,9 +97,9 @@
             // ulタグの中身を全消去する
             $('.lists').empty();
 
-            // ajax通信
-            booksDisplay(searchString, repeatCount);
           }
+          // ajax通信
+          booksDisplay(searchString, repeatCount);
         });
       });
 
@@ -135,33 +131,83 @@
           // jsonのlengthが0かどうかの分岐
           if(dataLength == 0) {
             // 検索結果がなかった場合のメッセージdivタグ
-            var div = $('<div></div>').addClass('message').html('検索結果が見つかりませんでした<br>別のキーワードで検索して下さい。');
+            var div = '<div class="message">検索結果が見つかりませんでした<br>別のキーワードで検索して下さい。</div>';
 
             // ulの一つ上にメッセージdivを追加
             $('.lists').before(div);
 
           }else if(dataLength > 0){
             // 画面に表示する書籍リストのDOMを格納するjqueryオブジェクト
-            var booksList = $();
+            var booksList = "";
 
             // ２０冊未満しかデータがなかった場合のために、jsonLengthを指定
             for(var i = 0; i < dataLength; i++) {
               var item = data.Items[i].Item;
-              var pushItem = createBookDOM(item);
+              var addItem = createBookDOMText(item);
 
               // 書籍リストのjqueryオブジェクトに作成した１冊分を追加する
-              booksList.push(pushItem[0]);
+              booksList += addItem;
             }
             // console.log(booksList[0]);
 
             // liのリストをulの要素のすぐ下に追加
             $('.lists').prepend(booksList);
           }
-        }).fail(function() {
-          alert('ERROR!!通信に失敗しました。');
+        }).fail(function(err) {
+          var error = err.responseJSON.error;
+          var errorDesc = err.responseJSON.error_description;
+          var errorStatus = err.status;
+          console.log(err);
+          console.log(error);
+          console.log(errorDesc);
+          console.log(errorStatus);
+          if(!error || !errorDesc || !errorStatus) {
+            alert('APIとの通信に失敗しました。');
+          }else {
+            alert('[' + errorStatus + ': ' + error + '] ' + errorDesc);
+          }
+
         });
       }
 
+
+      /**
+       * オブジェクトをテキスト形式でDOM生成用テキストを返す関数
+       *
+       * @param item 本１冊分のオブジェクト
+       * @returns li 本１冊分のDOM生成用テキスト
+       */
+      function createBookDOMText(item) {
+        var itemAuthor = item.author;               // 作者名
+        var itemPublisherName = item.publisherName; // 出版社名
+        var itemTitle = item.title;                 // 作品名
+        var itemUrl = item.itemUrl;                 // 商品ページURL
+        var itemImageUrl = item.largeImageUrl;      // 画像のURL
+
+        // 大枠のliタグ
+        var li = '<li class="lists__item">';
+
+        // liの子要素のdivタグ
+        li += '<div class="lists__item__inner">';
+
+        // divタグの子要素のaタグ
+        li += '<a class="lists__item__link" href="' + itemUrl + '" target="_blank">';
+
+        // aタグの子要素
+        li += '<img src="' + itemImageUrl + '" clss="lists__item__img" alt="' + itemTitle + '">';
+
+        li += '<p class="lists__item__detail">作品名：　' + itemTitle + '</p>';
+
+        li += '<p class="lists__item__detail">作者　：　' + itemAuthor + '</p>';
+
+        li += '<p class="lists__item__detail">出版社：　' + itemPublisherName + '</p>';
+
+        // 閉じタグをまとめて追加
+        li += '</a></div></li>';
+
+        // それぞれの親にappendしてreturn
+        return li
+      }
 
       /**
        * オブジェクトを受け取って指定のDOMに整形する
