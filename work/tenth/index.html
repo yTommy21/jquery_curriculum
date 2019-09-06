@@ -146,25 +146,13 @@
         var itemImageUrl = item.largeImageUrl;      // 画像のURL
 
         // 大枠のliタグ
-        var li = '<li class="lists__item">';
-
-        // liの子要素のdivタグ
-        li += '<div class="lists__item__inner">';
-
-        // divタグの子要素のaタグ
-        li += '<a class="lists__item__link" href="' + itemUrl + '" target="_blank">';
-
-        // aタグの子要素
-        li += '<img src="' + itemImageUrl + '" class="lists__item__img" alt="' + itemTitle + '">';
-
-        li += '<p class="lists__item__detail">作品名：　' + itemTitle + '</p>';
-
-        li += '<p class="lists__item__detail">作者　：　' + itemAuthor + '</p>';
-
-        li += '<p class="lists__item__detail">出版社：　' + itemPublisherName + '</p>';
-
-        // 閉じタグをまとめて追加
-        li += '</a></div></li>';
+        var li = '<li class="lists__item"><div class="lists__item__inner">' +
+          '<a class="lists__item__link" href="' + itemUrl + '" target="_blank">' +
+          '<img src="' + itemImageUrl + '" class="lists__item__img" alt="' + itemTitle + '">' +
+          '<p class="lists__item__detail">作品名：　' + itemTitle + '</p>' +
+          '<p class="lists__item__detail">作者　：　' + itemAuthor + '</p>' +
+          '<p class="lists__item__detail">出版社：　' + itemPublisherName + '</p>' +
+          '</a></div></li>';
 
         // それぞれの親にappendしてreturn
         return li
@@ -251,21 +239,22 @@
        * @param err Ajaxのfail引数
        */
       function showAjaxErrorMessage(err) {
-        var error = err.responseJSON.error;
-        var errorDesc = err.responseJSON.error_description;
         var errorStatus = err.status;
-        console.log(err);
-        console.log(error);
-        console.log(errorDesc);
-        console.log(errorStatus);
-        // if(!error || !errorDesc || !errorStatus) {
-        //   alert('APIとの通信に失敗しました。');
-        // }else {
-        //   alert('[' + errorStatus + ': ' + error + '] ' + errorDesc);
-        // }
+        var div = "";
 
-        // エラーメッセージを作成
-        var div = '<div class="message"> [' + errorStatus + ': ' + error + '] ' + errorDesc + '</div>';
+        console.log(err);
+        console.log(errorStatus);
+
+        if(!errorStatus) {
+          div = '<div class="message">APIとの通信に失敗しました。</div>';
+        }else {
+          var error = err.responseJSON.error;
+          var errorDesc = err.responseJSON.error_description;
+          console.log(error);
+          console.log(errorDesc);
+          // エラーメッセージを作成
+          div = '<div class="message"> [' + errorStatus + ': ' + error + '] ' + errorDesc + '</div>';
+        }
 
         // ulの一つ上にメッセージdivを追加
         $('.lists').before(div);
