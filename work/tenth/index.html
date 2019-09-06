@@ -89,7 +89,7 @@
             repeatCount += 1;
 
             // ajax通信
-            booksDisplay(searchString);
+            booksDisplay(searchString, repeatCount);
 
 
           }else if(searchString !== beforeSearchString) {
@@ -102,7 +102,7 @@
             $('.lists').empty();
 
             // ajax通信
-            booksDisplay(searchString);
+            booksDisplay(searchString, repeatCount);
           }
         });
       });
